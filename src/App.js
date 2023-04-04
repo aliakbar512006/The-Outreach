@@ -1,14 +1,28 @@
+import { useState } from "react";
+
+import Modal from "./components/Modal";
+import "./index.scss";
+
 function App() {
+   const [modalState, setModalState] = useState({
+      show: false,
+   });
+
+   const showModal = (e) =>
+      setModalState({
+         show: true,
+      });
+
    return (
-      <div className="App">
-         <h1 style={heading}>This is the starting of The Outreach :)</h1>
+      <div className="container">
+         <button className="toggle-button" id="centered-toggle-button" onClick={(e) => showModal()}>
+            Outreach
+         </button>
+         <Modal modalState={modalState} setModalState={setModalState}>
+            Message in Modal
+         </Modal>
       </div>
    );
 }
-
-const heading = {
-   textAlign: "center",
-   transform: "translate(0,45vh)",
-};
 
 export default App;
