@@ -10,7 +10,7 @@ const App = (): JSX.Element => {
 
    return (
       <div className="container">
-         <button className="toggle-button" id="centered-toggle-button" onClick={(e) => showModal}>
+         <button className="outreach-btn" id="centered-toggle-button" onClick={(e) => showModal(e)}>
             Outreach
          </button>
          <Modal modalState={modalState} setModalState={setModalState}>
