@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, KeyboardEvent } from "react";
+
+import { LightText } from "../styles/TextVariants.styled";
+import styled from "styled-components";
+import { TestEmailButton } from "../styles/ButtonVariants.styled";
 
 const TestEmailBar = (): JSX.Element => {
    return (
-      <div>
-         <p className="light-text">Send Test Email</p>
-         <div className="test-email-conatainer">
+      <>
+         <LightText>Send Test Email</LightText>
+         <TestEmailContainer>
             <TagsInput tags={["dev@gmail.com"]} />
-            <button> Send Test </button>
-         </div>
-      </div>
+            <TestEmailButton> Send Test </TestEmailButton>
+         </TestEmailContainer>
+      </>
    );
 };
 
@@ -23,7 +27,7 @@ const TagsInput = ({ tags }: TagsProps): JSX.Element => {
       setCurrentRecepients([...currentRecepients.filter((_, index) => index !== indexToRemove)]);
    };
 
-   const addTags = (event: Event): void => {
+   const addTags = (event: KeyboardEvent<HTMLInputElement>): void => {
       const target = event.target as HTMLInputElement;
       if (target?.value !== "") {
          setCurrentRecepients([...currentRecepients, target.value]);
@@ -31,20 +35,90 @@ const TagsInput = ({ tags }: TagsProps): JSX.Element => {
       }
    };
    return (
-      <div className="tags-input">
-         <ul id="tags">
+      <RecipientInput>
+         <Tags>
             {currentRecepients.map((tag, index) => (
-               <li key={index} className="tag">
-                  <span className="tag-title">{tag}</span>
-                  <span className="tag-close-icon" onClick={() => removeTags(index)}>
-                     x
-                  </span>
-               </li>
+               <Tag key={index}>
+                  <span>{tag}</span>
+                  <TagCloseIcon onClick={() => removeTags(index)}>x</TagCloseIcon>
+               </Tag>
             ))}
-         </ul>
+         </Tags>
          <input type="text" onKeyUp={(event) => (event.key === "Enter" ? addTags(event) : null)} />
-      </div>
+      </RecipientInput>
    );
 };
 
 export default TestEmailBar;
+
+const TestEmailContainer = styled.div`
+   display: flex;
+   column-gap: 5px;
+   padding: 5px 0px;
+   width: 100%;
+   margin: 0 0 30px 0;
+`;
+
+const RecipientInput = styled.div`
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+   min-height: 30px;
+   width: 480px;
+   padding: 0 8px;
+   border: 1px solid rgb(214, 216, 218);
+   border-radius: 6px;
+   &:focus-within {
+      border: 1px solid #0052cc;
+   }
+   input {
+      flex: 1;
+      border: none;
+      height: 30px;
+      font-size: 14px;
+      padding: 5px 0 5px 0;
+      &:focus {
+         outline: transparent;
+      }
+   }
+`;
+
+const Tags = styled.ul`
+   display: flex;
+   flex-wrap: wrap;
+   padding: 0;
+   margin: 8px 0 0 0;
+
+   span {
+      padding: 0px 5px;
+   }
+`;
+
+const Tag = styled.li`
+   width: auto;
+   height: 28px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: black;
+   padding: 0 8px;
+   font-size: 14px;
+   list-style: none;
+   border-radius: 30px;
+   margin: 0 8px 8px 0;
+   background: #e4e2f4;
+`;
+
+const TagCloseIcon = styled.span`
+   display: block;
+   width: 16px;
+   height: 16px;
+   line-height: 14px;
+   text-align: center;
+   font-size: 14px;
+   margin-left: 8px;
+   color: #0052cc;
+   border-radius: 50%;
+   background: #fff;
+   cursor: pointer;
+`;
