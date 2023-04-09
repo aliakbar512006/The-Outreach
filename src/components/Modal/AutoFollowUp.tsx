@@ -101,12 +101,23 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
          {stage.checked && (
             <>
                <FollowUpLabel>
-                  <RadioInput type="radio" name={`radio ${stage.no}`} value="plain text" defaultChecked onChange={(e) => changeInputState("selectedTextType", e.target.value)} />
+                  <RadioInput
+                     type="radio"
+                     name={`radio ${stage.no}`}
+                     value="plain text"
+                     defaultChecked
+                     onChange={(e) => changeInputState("selectedTextType", e.target.value)}
+                  />
                   <LightText>Send text above original:</LightText>
                </FollowUpLabel>
                <TextArea rows={3} cols={8} value={stage.message} onChange={(e) => changeInputState("message", e.target.value)} />
                <FollowUpLabel>
-                  <RadioInput type="radio" name={`radio ${stage.no}`} value="rich text" onChange={(e) => changeInputState("selectedTextType", e.target.value)} />
+                  <RadioInput
+                     type="radio"
+                     name={`radio ${stage.no}`}
+                     value="rich text"
+                     onChange={(e) => changeInputState("selectedTextType", e.target.value)}
+                  />
                   <LightText>Send rich-text email in same thread</LightText>
                </FollowUpLabel>
             </>

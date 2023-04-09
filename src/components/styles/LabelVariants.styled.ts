@@ -13,3 +13,7 @@ export const FollowUpLabel = styled(Label)`
 export const ScheduleLabel = styled(FollowUpLabel)`
     margin: 15px 55px;
 `
+
+export const SpeedLabel = styled(FollowUpLabel)`
+    margin: 15px 0px 15px 55px;
+`
