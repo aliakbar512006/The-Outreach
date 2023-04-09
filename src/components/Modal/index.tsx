@@ -4,6 +4,7 @@ import TestEmailBar from "./TestEmailBar";
 import Tracking from "./Tracking";
 import Action from "./Actions";
 import AutoFollowUp from "./AutoFollowUp";
+import Schedule from "./Schedule";
 
 import styled from "styled-components";
 import { BoldText } from "../styles/TextVariants.styled";
@@ -31,6 +32,7 @@ const Modal = ({ children, modalState, setModalState }: ModalProps): JSX.Element
                      <Tracking />
                      <Action />
                      <AutoFollowUp />
+                     <Schedule />
                   </SettingsBoxContent>
                </>
             </Content>
@@ -46,8 +48,8 @@ export default Modal;
 
 const ModalContainer = styled.div`
    width: 500px;
-   height: auto;
-   overflow: auto;
+   max-height: 95vh;
+   overflow-y: auto; // for scroll bars
    background: white;
    border: 1px solid #ccc;
    transition: 1.1s ease-out;
@@ -79,10 +81,11 @@ const Content = styled.div`
 `;
 
 const SettingsBoxContent = styled.div`
+   margin-top: 20px;
    & > div {
       border: 1px solid rgb(170, 165, 165);
       border-radius: 4px;
-      margin: 10px 0px;
+      margin: 5px 0px;
       padding: 10px;
       background-color: #f6f6f6;
    }

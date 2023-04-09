@@ -25,8 +25,8 @@ export const GlobalStyles = createGlobalStyle`
     }
     
     @font-face {
-        font-family: "Poppins-Medium";
-        src: local("Poppins-Medium"), url(../../assets/fonts/Poppins/Poppins-Light.woff) format("woff");
+        font-family: "Poppins-Reguar";
+        src: local("Poppins-Regular"), url(../../assets/fonts/Poppins/Poppins-Regular.woff) format("woff");
     }
     
     @font-face {

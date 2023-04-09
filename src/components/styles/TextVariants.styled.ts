@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const LightText = styled.p`
    font-size: 12.5px;
-   font-family: "Poppins-Medium";
+   font-family: "Poppins-Regular";
 `;
 
 export const BoldText = styled.p`
