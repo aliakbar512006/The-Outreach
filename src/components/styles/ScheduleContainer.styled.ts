@@ -25,6 +25,10 @@ export const ScheduleContainer = styled(FollowupContainer)`
     column-gap: 20px;
 
     select {
-        min-width: 150px;
+        min-width: 130px;
     }
+`
+
+export const SpeedConfigContainer = styled(ScheduleContainer)`
+    column-gap: 10px;
 `
