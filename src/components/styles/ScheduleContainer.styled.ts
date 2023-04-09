@@ -32,3 +32,9 @@ export const ScheduleContainer = styled(FollowupContainer)`
 export const SpeedConfigContainer = styled(ScheduleContainer)`
     column-gap: 10px;
 `
+export const RepeatConfigContainer = styled(SpeedConfigContainer)`
+
+    select {
+        min-width: 70px;
+    }
+`

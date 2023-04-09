@@ -12,6 +12,7 @@ import { ScheduleLabel } from "../styles/LabelVariants.styled";
 import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
 
 import scheduleImage from "../../assets/images/schedule.png";
+import ScheduledRepeat from "./Repeat";
 
 interface ISchedule {
    scheduledTimes: string[];
@@ -57,6 +58,8 @@ const Schedule = (): JSX.Element => {
          </>
          <HRLineBreak />
          <SchduledSpeed />
+         <HRLineBreak />
+         <ScheduledRepeat />
       </div>
    );
 };
