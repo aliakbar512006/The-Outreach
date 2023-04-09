@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 
 import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { ScheduleContainer } from "../styles/ScheduleContainer.styled";
@@ -10,13 +10,17 @@ import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.style
 import scheduleImage from "../../assets/images/schedule.png";
 
 interface ISchedule {
-   scheduleTime: string[];
+   scheduledTimes: string[];
    isWeekendsSkipped: boolean;
-   weekendPrompt: string;
+   selectedScheduledTime: string;
 }
 
 const Schedule = (): JSX.Element => {
-   const [schedulement, _] = useState<ISchedule>({ scheduleTime: ["Now", "5 minuted later"], weekendPrompt: "Skip weekends", isWeekendsSkipped: false });
+   const [schedulment, setSchedulment] = useState<ISchedule>({
+      scheduledTimes: ["Now", "5 minutes later", "20 minutes later", "30 minutes later", "35 minutes later", "40 minutes later", "45 minutes later"],
+      selectedScheduledTime: "Now",
+      isWeekendsSkipped: false,
+   });
 
    return (
       <div>
@@ -26,8 +30,8 @@ const Schedule = (): JSX.Element => {
          </SectionHeadingContainer>
          <ScheduleContainer>
             <LightText>Time: </LightText>
-            <Dropdown>
-               {schedulement.scheduleTime.map((time) => (
+            <Dropdown value={schedulment.selectedScheduledTime} onChange={(e) => setSchedulment({ ...schedulment, selectedScheduledTime: e.target.value })}>
+               {schedulment.scheduledTimes.map((time) => (
                   <option value={time} key={time}>
                      {time}
                   </option>
@@ -35,8 +39,8 @@ const Schedule = (): JSX.Element => {
             </Dropdown>
          </ScheduleContainer>
          <ScheduleLabel>
-            <CheckboxInput type="checkbox" checked={schedulement.isWeekendsSkipped} />
-            <LightText>{schedulement.weekendPrompt}</LightText>
+            <CheckboxInput type="checkbox" checked={schedulment.isWeekendsSkipped} onChange={() => setSchedulment({ ...schedulment, isWeekendsSkipped: !schedulment.isWeekendsSkipped })} />
+            <LightText>Skip Weekends</LightText>
          </ScheduleLabel>
       </div>
    );

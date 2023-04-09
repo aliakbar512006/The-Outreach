@@ -17,7 +17,7 @@ const Action = (): JSX.Element => {
             <BoldText>Action</BoldText>
          </SectionHeadingContainer>
          <ActionContainer>
-            <Radio label="Send Email" value="send" checked={true} />
+            <Radio label="Send Email" value="send" />
             <Radio label="Create Drafts" value="draft" />
          </ActionContainer>
       </div>
@@ -27,17 +27,17 @@ const Action = (): JSX.Element => {
 type RadioProps = {
    label: string;
    value: string;
-   checked?: boolean;
 };
 
-const Radio = ({ label, value, checked }: RadioProps) => {
-   const [_, setMailType] = useState<string>("send");
+const Radio = ({ label, value }: RadioProps) => {
+   const [mailType, setMailType] = useState<string>("send");
 
-   const handleMailType = (e: ChangeEvent<HTMLInputElement>): void => setMailType(e.target.value);
+   console.log(mailType);
+
    return (
       <>
          <Label>
-            <RadioInput type="radio" name="radio" value={value} checked={checked} onChange={(e) => handleMailType(e)} />
+            <RadioInput type="radio" name="radio" defaultChecked={value === "send"} value={value} onChange={(e) => setMailType(value)} />
             <LightText>{label}</LightText>
          </Label>
       </>

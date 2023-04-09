@@ -7,6 +7,7 @@ import AutoFollowUp from "./AutoFollowUp";
 import Schedule from "./Schedule";
 
 import styled from "styled-components";
+
 import { BoldText } from "../styles/TextVariants.styled";
 import { Button } from "../styles/ButtonVariants.styled";
 

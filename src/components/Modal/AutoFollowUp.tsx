@@ -16,25 +16,21 @@ interface IStage {
    no: number;
    checked: boolean;
    message: string;
-   actionType: string[];
-   days: number;
-   currentTextPrompt: string;
-   isCurrentTextChecked: boolean;
-   richTextPrompt: string;
-   isRichTextChecked: boolean;
+   actionTypes: string[];
+   selectedAction: string;
+   days: string;
+   selectedTextType: string;
 }
 
-var initializeStage = (no: number, days?: number): IStage => {
+var initializeStage = (no: number, days?: string): IStage => {
    return {
       no,
       checked: false,
       message: "Just Making sure you saw this",
-      actionType: ["No Reply", "No Open", "No Click", "Everyone"],
-      days: days || 2,
-      isCurrentTextChecked: true,
-      currentTextPrompt: "Send text above original:",
-      richTextPrompt: "Send rich-text email in same thread",
-      isRichTextChecked: false,
+      actionTypes: ["No Reply", "No Open", "No Click", "Everyone"],
+      selectedAction: "No Reply",
+      days: days || "2",
+      selectedTextType: "plain text",
    };
 };
 
@@ -61,16 +57,16 @@ type StageProps = {
 };
 
 const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.Element => {
-   const [days, setDays] = useState<number>(stage.days);
-
-   // const changeInputState = (stateName: string, value: boolean): void =>{
-   //    stage[stateName] = value
-   // }
+   const changeInputState = (stateName: string, value: string | boolean): void => {
+      const prevStage = followUpStages;
+      prevStage[stage.no][stateName] = value;
+      setFollowUpStages([...prevStage]);
+   };
 
    const createNewStage = (): void => {
       const prevStages = followUpStages;
       prevStages[stage.no].checked = true;
-      setFollowUpStages([...prevStages, initializeStage(followUpStages.length, stage.days * 2)]);
+      setFollowUpStages([...prevStages, initializeStage(followUpStages.length, "2")]);
    };
 
    const removeStages = (): void => {
@@ -91,27 +87,27 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
          </StageHeading>
          <FollowupContainer>
             <CheckboxInput type="checkbox" checked={stage.checked} onChange={() => handleStages()} />
-            <LightText>If </LightText>
-            <Dropdown>
-               {stage.actionType.map((opt) => (
+            <LightText>If</LightText>
+            <Dropdown value={stage.selectedAction} onChange={(e) => changeInputState("selectedAction", e.target.value)}>
+               {stage.actionTypes.map((opt) => (
                   <option value={opt} key={opt}>
                      {opt}
                   </option>
                ))}
             </Dropdown>
-            <LightText> after </LightText>
-            <input type="string" value={days} onChange={(e) => setDays(+e.target.value)} />
+            <LightText>after</LightText>
+            <input type="string" value={stage.days} onChange={(e) => changeInputState("days", e.target.value)} />
          </FollowupContainer>
          {stage.checked && (
             <>
                <FollowUpLabel>
-                  <RadioInput type="radio" value={`radio text ${stage.no}`} checked={stage.isCurrentTextChecked} />
-                  <LightText>{stage.currentTextPrompt}</LightText>
+                  <RadioInput type="radio" name={`radio ${stage.no}`} value="plain text" defaultChecked onChange={(e) => changeInputState("selectedTextType", e.target.value)} />
+                  <LightText>Send text above original:</LightText>
                </FollowUpLabel>
-               <TextArea rows={3} cols={8} value={stage.message} />
+               <TextArea rows={3} cols={8} value={stage.message} onChange={(e) => changeInputState("message", e.target.value)} />
                <FollowUpLabel>
-                  <RadioInput type="radio" value={`radio text ${stage.no}`} checked={stage.isRichTextChecked} />
-                  <LightText>{stage.richTextPrompt}</LightText>
+                  <RadioInput type="radio" name={`radio ${stage.no}`} value="rich text" onChange={(e) => changeInputState("selectedTextType", e.target.value)} />
+                  <LightText>Send rich-text email in same thread</LightText>
                </FollowUpLabel>
             </>
          )}

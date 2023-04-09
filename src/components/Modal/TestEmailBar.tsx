@@ -1,7 +1,8 @@
 import RecipientTags from "./RecipientTags";
 
-import { LightText } from "../styles/TextVariants.styled";
 import styled from "styled-components";
+
+import { LightText } from "../styles/TextVariants.styled";
 import { TestEmailButton } from "../styles/ButtonVariants.styled";
 
 const TestEmailBar = (): JSX.Element => {

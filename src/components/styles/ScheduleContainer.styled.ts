@@ -5,7 +5,7 @@ export const FollowupContainer = styled.div`
     display: flex;
     align-items: center;
     margin: 10px 0;
-    column-gap: 5px;
+    column-gap: 8px;
 
     input, select {
         max-width: 35px;
