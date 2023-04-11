@@ -10,7 +10,7 @@ import { OutreachButton } from "./components/styles/ButtonVariants.styled";
 const theme = {
    colors: {
       primaryColor: "#6350c1",
-      borderColor: "#fff",
+      borderColor: "#6350c1",
    },
 };
 

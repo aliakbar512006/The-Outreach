@@ -8,7 +8,7 @@ import { TestEmailButton } from "../styles/ButtonVariants.styled";
 const TestEmailBar = (): JSX.Element => {
    return (
       <>
-         <LightText>Send Test Email</LightText>
+         <LightText>Send Emails</LightText>
          <TestEmailContainer>
             <RecipientTags tags={["dev@gmail.com"]} />
             <TestEmailButton> Send Test </TestEmailButton>

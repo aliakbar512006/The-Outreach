@@ -42,6 +42,7 @@ const AutoFollowUp = (): JSX.Element => {
          <SectionHeadingContainer>
             <img src={followUpImage} alt="follow-up img" />
             <BoldText>Auto Follow-up</BoldText>
+            <span></span>
          </SectionHeadingContainer>
          {followUpStages.map((stage) => (
             <Stage stage={stage} followUpStages={followUpStages} setFollowUpStages={setFollowUpStages} key={stage.no} />
@@ -83,7 +84,7 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
    return (
       <>
          <StageHeading>
-            <BoldText>Stage {stage.no + 1} :</BoldText>
+            <BoldText>Stage {stage.no + 1}</BoldText>
          </StageHeading>
          <FollowupContainer>
             <CheckboxInput type="checkbox" checked={stage.checked} onChange={() => handleStages()} />
@@ -132,12 +133,15 @@ const StageHeading = styled.div`
 `;
 
 const TextArea = styled.textarea`
-   margin: 10px 30px;
    width: 90%;
-   padding: 5px 10px;
+   display: flex;
+   justify-content: center;
+   margin: 10px 20px;
+   padding: 10px 20px;
    font-family: "Poppins-Regular";
    font-size: 12.5px;
    resize: none;
+   border-radius: 45px;
 `;
 
 export default AutoFollowUp;

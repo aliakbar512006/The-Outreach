@@ -44,16 +44,18 @@ const RecipientInput = styled.div`
    min-height: 30px;
    width: 480px;
    padding: 0 8px;
-   border: 1px solid rgb(214, 216, 218);
-   border-radius: 6px;
+   border: 1px solid ${({ theme }) => theme.colors.borderColor};
+   border-radius: 5px;
+
    &:focus-within {
-      border: 1px solid #0052cc;
+      border: 1.5px solid ${({ theme }) => theme.colors.borderColor};
    }
    input {
       flex: 1;
       border: none;
       height: 30px;
       font-size: 14px;
+
       padding: 5px 0 5px 0;
       &:focus {
          outline: transparent;

@@ -18,6 +18,7 @@ const Tracking = (): JSX.Element => {
          <SectionHeadingContainer>
             <img src={trackingImage} alt="tracking img" />
             <BoldText>Tracking</BoldText>
+            <span></span>
          </SectionHeadingContainer>
          <TrackingContainer>
             <Checkbox label="Opens" checked={isOpenChecked} setIsChecked={setIsOpenChecked} />
@@ -50,6 +51,6 @@ export default Tracking;
 const TrackingContainer = styled.div`
    padding: 10px 0px;
    display: flex;
+   justify-content: center;
    column-gap: 20px;
-   justify-content: flex-start;
 `;

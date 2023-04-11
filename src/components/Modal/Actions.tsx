@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 
 import styled from "styled-components";
 
@@ -15,6 +15,7 @@ const Action = (): JSX.Element => {
          <SectionHeadingContainer>
             <img src={actionImage} alt="action img" />
             <BoldText>Action</BoldText>
+            <span></span>
          </SectionHeadingContainer>
          <ActionContainer>
             <Radio label="Send Email" value="send" />
@@ -50,5 +51,5 @@ const ActionContainer = styled.div`
    padding: 10px 0px;
    display: flex;
    column-gap: 20px;
-   justify-content: flex-start;
+   justify-content: center;
 `;
