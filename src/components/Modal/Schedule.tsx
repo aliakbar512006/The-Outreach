@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+import SchduledSpeed from "./Speed";
+
+import styled from "styled-components";
+
 import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { ScheduleContainer } from "../styles/ScheduleContainer.styled";
 import { Dropdown } from "../styles/Dropdown.styled";
@@ -24,26 +28,47 @@ const Schedule = (): JSX.Element => {
 
    return (
       <div>
-         <SectionHeadingContainer>
-            <img src={scheduleImage} alt="follow-up img" />
-            <BoldText>Schedule</BoldText>
-         </SectionHeadingContainer>
-         <ScheduleContainer>
-            <LightText>Time: </LightText>
-            <Dropdown value={schedulment.selectedScheduledTime} onChange={(e) => setSchedulment({ ...schedulment, selectedScheduledTime: e.target.value })}>
-               {schedulment.scheduledTimes.map((time) => (
-                  <option value={time} key={time}>
-                     {time}
-                  </option>
-               ))}
-            </Dropdown>
-         </ScheduleContainer>
-         <ScheduleLabel>
-            <CheckboxInput type="checkbox" checked={schedulment.isWeekendsSkipped} onChange={() => setSchedulment({ ...schedulment, isWeekendsSkipped: !schedulment.isWeekendsSkipped })} />
-            <LightText>Skip Weekends</LightText>
-         </ScheduleLabel>
+         <>
+            <SectionHeadingContainer>
+               <img src={scheduleImage} alt="follow-up img" />
+               <BoldText>Schedule</BoldText>
+            </SectionHeadingContainer>
+            <ScheduleContainer>
+               <BoldText>Time: </BoldText>
+               <Dropdown
+                  value={schedulment.selectedScheduledTime}
+                  onChange={(e) => setSchedulment({ ...schedulment, selectedScheduledTime: e.target.value })}
+               >
+                  {schedulment.scheduledTimes.map((time) => (
+                     <option value={time} key={time}>
+                        {time}
+                     </option>
+                  ))}
+               </Dropdown>
+            </ScheduleContainer>
+            <ScheduleLabel>
+               <CheckboxInput
+                  type="checkbox"
+                  checked={schedulment.isWeekendsSkipped}
+                  onChange={() => setSchedulment({ ...schedulment, isWeekendsSkipped: !schedulment.isWeekendsSkipped })}
+               />
+               <LightText>Skip Weekends</LightText>
+            </ScheduleLabel>
+         </>
+         <HRLineBreak />
+         <SchduledSpeed />
       </div>
    );
 };
+
+const HRLineBreak = styled.span`
+   display: block;
+   margin-end: auto;
+   margin-start: auto;
+   border: 1px inset ${({ theme }) => theme.colors.borderColor};
+   overflow: hidden;
+   margin-before: 0.2em;
+   margin-after: 0.2em;
+`;
 
 export default Schedule;
