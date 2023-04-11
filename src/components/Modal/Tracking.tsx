@@ -1,16 +1,28 @@
 import { useState, Dispatch, SetStateAction } from "react";
 
+import styled from "styled-components";
+
+import { Label } from "../styles/LabelVariants.styled";
+import { CheckboxInput } from "../styles/Checkbox.styled";
+import { BoldText, LightText } from "../styles/TextVariants.styled";
+import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
+
+import trackingImage from "../../assets/images/tracking.png";
+
 const Tracking = (): JSX.Element => {
-   const [isOpenChecked, setIsOpenChecked] = useState<boolean>(false);
-   const [isClicksChecked, setIsClicksChecked] = useState<boolean>(false);
+   const [isOpenChecked, setIsOpenChecked] = useState<boolean>(true);
+   const [isClicksChecked, setIsClicksChecked] = useState<boolean>(true);
 
    return (
       <div>
-         <p className="bold-text">Tracking</p>
-         <div className="tracking-section-container">
+         <SectionHeadingContainer>
+            <img src={trackingImage} alt="tracking img" />
+            <BoldText>Tracking</BoldText>
+         </SectionHeadingContainer>
+         <TrackingContainer>
             <Checkbox label="Opens" checked={isOpenChecked} setIsChecked={setIsOpenChecked} />
             <Checkbox label="Clicks" checked={isClicksChecked} setIsChecked={setIsClicksChecked} />
-         </div>
+         </TrackingContainer>
       </div>
    );
 };
@@ -23,13 +35,21 @@ type CheckboxProps = {
 
 const Checkbox = ({ label, checked, setIsChecked }: CheckboxProps) => {
    return (
-      <div className="checkbox-container">
-         <label>
-            <input type="checkbox" checked={checked} className={checked ? "checked" : ""} onChange={() => setIsChecked((prev: boolean) => !prev)} />
-            <span>{label}</span>
-         </label>
-      </div>
+      <>
+         <Label>
+            <CheckboxInput type="checkbox" checked={checked} onChange={() => setIsChecked((prev: boolean) => !prev)} />
+            <span className="checkmark"></span>
+            <LightText>{label}</LightText>
+         </Label>
+      </>
    );
 };
 
 export default Tracking;
+
+const TrackingContainer = styled.div`
+   padding: 10px 0px;
+   display: flex;
+   column-gap: 20px;
+   justify-content: flex-start;
+`;
