@@ -8,4 +8,5 @@ export const CheckboxInput = styled.input`
    outline: none;
    cursor: pointer;
    accent-color: ${({ theme }) => theme.colors.primaryColor};
+   border-color: ${({ theme }) => theme.colors.primaryColor};
 `;

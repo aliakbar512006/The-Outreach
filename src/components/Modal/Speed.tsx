@@ -5,6 +5,9 @@ import { SpeedConfigContainer } from "../styles/ScheduleContainer.styled";
 import { Dropdown } from "../styles/Dropdown.styled";
 import { CheckboxInput } from "../styles/Checkbox.styled";
 import { SpeedLabel } from "../styles/LabelVariants.styled";
+import { SectionSubHeadingContainer } from "../styles/SectionHeadingContainer.styled";
+
+import speedImage from "../../assets/images/speed.png";
 
 interface IScheduledSpeed {
    noOfEmails: string;
@@ -23,11 +26,15 @@ const SchduledSpeed = (): JSX.Element => {
 
    return (
       <div>
+         <SectionSubHeadingContainer>
+            <img src={speedImage} alt="timing img" />
+            <BoldText>Speed</BoldText>
+            <span></span>
+         </SectionSubHeadingContainer>
          <SpeedConfigContainer>
-            <BoldText>Speed: </BoldText>
             <LightText>Send</LightText>
             <input type="text" value={speedConfigs.noOfEmails} onChange={(e) => setSpeedConfigs({ ...speedConfigs, noOfEmails: e.target.value })} />
-            <LightText>emails/day</LightText>
+            <LightText>emails / day</LightText>
          </SpeedConfigContainer>
          <SpeedConfigContainer>
             <SpeedLabel>

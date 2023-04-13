@@ -7,7 +7,7 @@ import { CheckboxInput } from "../styles/Checkbox.styled";
 import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
 
-import trackingImage from "../../assets/images/tracking.png";
+// import trackingImage from "../../assets/images/tracking.png";
 
 const Tracking = (): JSX.Element => {
    const [isOpenChecked, setIsOpenChecked] = useState<boolean>(true);
@@ -16,7 +16,7 @@ const Tracking = (): JSX.Element => {
    return (
       <div>
          <SectionHeadingContainer>
-            <img src={trackingImage} alt="tracking img" />
+            <span></span>
             <BoldText>Tracking</BoldText>
             <span></span>
          </SectionHeadingContainer>

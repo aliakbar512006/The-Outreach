@@ -15,3 +15,16 @@ export const SectionHeadingContainer = styled.div`
         height: 25px;
     }
 `
+
+export const SectionSubHeadingContainer  = styled(SectionHeadingContainer)`
+    justify-content: center;
+    border-bottom: none;
+    column-gap: 10px;
+    padding: 0 50px 5px 30px;
+    margin-top: 15px;
+
+    img {
+        width: 20px;
+        height: 20px;
+    }
+`

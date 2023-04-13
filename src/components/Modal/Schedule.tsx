@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import SchduledSpeed from "./Speed";
+import ScheduledRepeat from "./Repeat";
 
 import styled from "styled-components";
 
@@ -8,21 +9,22 @@ import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { ScheduleContainer } from "../styles/ScheduleContainer.styled";
 import { Dropdown } from "../styles/Dropdown.styled";
 import { CheckboxInput } from "../styles/Checkbox.styled";
-import { ScheduleLabel } from "../styles/LabelVariants.styled";
-import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
+import { Label } from "../styles/LabelVariants.styled";
+import { SectionHeadingContainer, SectionSubHeadingContainer } from "../styles/SectionHeadingContainer.styled";
 
 import scheduleImage from "../../assets/images/schedule.png";
-import ScheduledRepeat from "./Repeat";
+import timingImage from "../../assets/images/timing.png";
+import dayImage from "../../assets/images/day.png";
 
 interface ISchedule {
-   isWeekendsSkipped: boolean;
    timingFrom: string[];
    selectedTimingFrom: string;
    timingTo: string[];
    selectedTimingTo: string;
-   selectedScheduledTime: string;
    timezones: string[];
    selectedTimezone: string;
+   days: string[];
+   selectedDays: string[];
 }
 
 const Schedule = (): JSX.Element => {
@@ -31,11 +33,22 @@ const Schedule = (): JSX.Element => {
       selectedTimingFrom: "8 PM",
       timingTo: ["8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"],
       selectedTimingTo: "9:00 PM",
-      selectedScheduledTime: "Now",
-      isWeekendsSkipped: false,
-      timezones: ["Eastern Time ('US and Canada') (UTC - 5:00)"],
-      selectedTimezone: "Eastern Time('US and Canada')(UTC - 5:00)",
+      timezones: ["Eastern Time (US and Canada) (UTC - 5:00)"],
+      selectedTimezone: "Eastern Time (US and Canada) (UTC - 5:00)",
+      days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      selectedDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
    });
+
+   const handleSelectedDays = (selectedDay: string, dayState: boolean): void => {
+      if (dayState === true) setSchedulment({ ...schedulment, selectedDays: [...schedulment.selectedDays, selectedDay] });
+      else
+         setSchedulment({
+            ...schedulment,
+            selectedDays: [...schedulment.selectedDays.filter((_, index) => index !== schedulment.selectedDays.indexOf(selectedDay))],
+         });
+
+      console.log(schedulment.selectedDays);
+   };
 
    return (
       <div>
@@ -45,8 +58,13 @@ const Schedule = (): JSX.Element => {
                <BoldText>Schedule</BoldText>
                <span></span>
             </SectionHeadingContainer>
+
             <ScheduleContainer>
-               <BoldText>Timing</BoldText>
+               <SectionSubHeadingContainer>
+                  <img src={timingImage} alt="timing img" />
+                  <BoldText>Timing</BoldText>
+                  <span></span>
+               </SectionSubHeadingContainer>
                <TimingDropdownContainer>
                   <Dropdown
                      value={schedulment.selectedTimingFrom}
@@ -83,14 +101,24 @@ const Schedule = (): JSX.Element => {
                </Dropdown>
             </TimezoneContainer>
 
-            <ScheduleLabel>
-               <CheckboxInput
-                  type="checkbox"
-                  checked={schedulment.isWeekendsSkipped}
-                  onChange={() => setSchedulment({ ...schedulment, isWeekendsSkipped: !schedulment.isWeekendsSkipped })}
-               />
-               <LightText>Skip Weekends</LightText>
-            </ScheduleLabel>
+            <SectionSubHeadingContainer>
+               <img src={dayImage} alt="day img" />
+               <BoldText>Days</BoldText>
+               <span></span>
+            </SectionSubHeadingContainer>
+            <DaysContainer>
+               {schedulment.days.map((day) => (
+                  <Label>
+                     <CheckboxInput
+                        type="checkbox"
+                        checked={schedulment.selectedDays.includes(day)}
+                        onChange={(e) => handleSelectedDays(day, !schedulment.selectedDays.includes(day))}
+                        key={day}
+                     />
+                     <LightText>{day}</LightText>
+                  </Label>
+               ))}
+            </DaysContainer>
          </>
          <HRLineBreak />
          <SchduledSpeed />
@@ -122,6 +150,15 @@ const TimezoneContainer = styled.div`
       max-width: 300px;
       font-size: 12px;
    }
+`;
+
+const DaysContainer = styled.div`
+   margin-bottom: 15px;
+   padding: 10px 0;
+   display: flex;
+   flex-wrap: wrap;
+   gap: 10px;
+   justify-content: center;
 `;
 
 const HRLineBreak = styled.span`

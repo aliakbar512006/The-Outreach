@@ -8,9 +8,10 @@ import { Dropdown } from "../styles/Dropdown.styled";
 import { CheckboxInput } from "../styles/Checkbox.styled";
 import { FollowUpLabel } from "../styles/LabelVariants.styled";
 import { RadioInput } from "../styles/Radio.styled";
-import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
+import { SectionHeadingContainer, SectionSubHeadingContainer } from "../styles/SectionHeadingContainer.styled";
 
 import followUpImage from "../../assets/images/follow-up.png";
+import stageImage from "../../assets/images/stages.png";
 
 interface IStage {
    no: number;
@@ -83,9 +84,11 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
 
    return (
       <>
-         <StageHeading>
+         <SectionSubHeadingContainer>
+            <img src={stageImage} alt="timing img" />
             <BoldText>Stage {stage.no + 1}</BoldText>
-         </StageHeading>
+            <span></span>
+         </SectionSubHeadingContainer>
          <FollowupContainer>
             <CheckboxInput type="checkbox" checked={stage.checked} onChange={() => handleStages()} />
             <LightText>If</LightText>
@@ -127,18 +130,13 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
    );
 };
 
-const StageHeading = styled.div`
-   margin-top: 15px;
-   font-size: 12px;
-`;
-
 const TextArea = styled.textarea`
    width: 90%;
    display: flex;
    justify-content: center;
    margin: 10px 20px;
    padding: 10px 20px;
-   font-family: "Poppins-Regular";
+   font-family: "Montserrat-Regular";
    font-size: 12.5px;
    resize: none;
    border-radius: 45px;

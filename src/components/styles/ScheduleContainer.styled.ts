@@ -22,7 +22,7 @@ export const FollowupContainer = styled.div`
 
     select {
         min-width: 100px;
-        font-family: "Poppins-Regular";
+        font-family: "Montserrat-Regular";
         font-size: 12px;
     }
 

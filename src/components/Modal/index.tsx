@@ -15,9 +15,21 @@ type ModalProps = {
    children?: string;
    modalState: boolean;
    setModalState: Dispatch<SetStateAction<boolean>>;
+   setRecipientModalState: Dispatch<SetStateAction<boolean>>;
+   bulkRecipients: string;
+   inputType: string;
+   setBulkRecipients: Dispatch<SetStateAction<string>>;
 };
 
-const Modal = ({ children, modalState, setModalState }: ModalProps): JSX.Element => {
+const Modal = ({
+   children,
+   modalState,
+   setModalState,
+   setRecipientModalState,
+   bulkRecipients,
+   inputType,
+   setBulkRecipients,
+}: ModalProps): JSX.Element => {
    const onClose = (e: React.MouseEvent): void => setModalState(false);
 
    if (!modalState) return <></>;
@@ -28,7 +40,12 @@ const Modal = ({ children, modalState, setModalState }: ModalProps): JSX.Element
                <BolderText>The Outreach</BolderText>
             </Header>
             <Content>
-               <TestEmailBar />
+               <TestEmailBar
+                  setRecipientModalState={setRecipientModalState}
+                  bulkRecipients={bulkRecipients}
+                  inputType={!!bulkRecipients.length ? "bulk" : ""}
+                  setBulkRecipients={setBulkRecipients}
+               />
                <>
                   <SettingsBoxContent>
                      <Tracking />
