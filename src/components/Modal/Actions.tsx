@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useContext } from "react";
+
+import { CampaignContextType } from "../../@types/campaign";
+
+import { CampaignContext } from "../../context/campaignContext";
 
 import styled from "styled-components";
 
@@ -6,8 +10,6 @@ import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { Label } from "../styles/LabelVariants.styled";
 import { RadioInput } from "../styles/Radio.styled";
 import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
-
-// import actionImage from "../../assets/images/action.png";
 
 const Action = (): JSX.Element => {
    return (
@@ -31,12 +33,18 @@ type RadioProps = {
 };
 
 const Radio = ({ label, value }: RadioProps) => {
-   const [mailType, setMailType] = useState<string>("send");
+   const { campaign, updateCampaign } = useContext(CampaignContext) as CampaignContextType;
 
    return (
       <>
          <Label>
-            <RadioInput type="radio" name="radio" defaultChecked={value === "send"} value={value} onChange={(e) => setMailType(value)} />
+            <RadioInput
+               type="radio"
+               name="radio"
+               defaultChecked={value === "send"}
+               value={value}
+               onChange={() => updateCampaign({ ...campaign, actionType: { mailType: value } })}
+            />
             <LightText>{label}</LightText>
          </Label>
       </>

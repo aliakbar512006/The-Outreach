@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useContext } from "react";
 
 import SchduledSpeed from "./Speed";
 import ScheduledRepeat from "./Repeat";
+
+import { CampaignContextType } from "../../@types/campaign";
+
+import { CampaignContext } from "../../context/campaignContext";
 
 import styled from "styled-components";
 
@@ -16,38 +20,23 @@ import scheduleImage from "../../assets/images/schedule.png";
 import timingImage from "../../assets/images/timing.png";
 import dayImage from "../../assets/images/day.png";
 
-interface ISchedule {
-   timingFrom: string[];
-   selectedTimingFrom: string;
-   timingTo: string[];
-   selectedTimingTo: string;
-   timezones: string[];
-   selectedTimezone: string;
-   days: string[];
-   selectedDays: string[];
-}
-
 const Schedule = (): JSX.Element => {
-   const [schedulment, setSchedulment] = useState<ISchedule>({
-      timingFrom: ["8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"],
-      selectedTimingFrom: "8 PM",
-      timingTo: ["8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"],
-      selectedTimingTo: "9:00 PM",
-      timezones: ["Eastern Time (US and Canada) (UTC - 5:00)"],
-      selectedTimezone: "Eastern Time (US and Canada) (UTC - 5:00)",
-      days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      selectedDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-   });
+   const { campaign, updateCampaign } = useContext(CampaignContext) as CampaignContextType;
+   const { schedulement } = campaign;
 
    const handleSelectedDays = (selectedDay: string, dayState: boolean): void => {
-      if (dayState === true) setSchedulment({ ...schedulment, selectedDays: [...schedulment.selectedDays, selectedDay] });
+      if (dayState === true)
+         updateCampaign({ ...campaign, schedulement: { ...schedulement, selectedDays: [...campaign.schedulement.selectedDays, selectedDay] } });
       else
-         setSchedulment({
-            ...schedulment,
-            selectedDays: [...schedulment.selectedDays.filter((_, index) => index !== schedulment.selectedDays.indexOf(selectedDay))],
+         updateCampaign({
+            ...campaign,
+            schedulement: {
+               ...schedulement,
+               selectedDays: [
+                  ...schedulement.selectedDays.filter((_: any, index: number) => index !== schedulement.selectedDays.indexOf(selectedDay)),
+               ],
+            },
          });
-
-      console.log(schedulment.selectedDays);
    };
 
    return (
@@ -67,23 +56,23 @@ const Schedule = (): JSX.Element => {
                </SectionSubHeadingContainer>
                <TimingDropdownContainer>
                   <Dropdown
-                     value={schedulment.selectedTimingFrom}
-                     onChange={(e) => setSchedulment({ ...schedulment, selectedTimingFrom: e.target.value })}
+                     value={schedulement.selectedTimingFrom}
+                     onChange={(e) => updateCampaign({ ...campaign, schedulement: { ...schedulement, selectedTimingFrom: e.target.value } })}
                   >
-                     {schedulment.timingFrom.map((time) => (
-                        <option value={time} key={time}>
-                           {time}
+                     {schedulement.timingFrom.map((timeFrom: string) => (
+                        <option value={timeFrom} key={timeFrom}>
+                           {timeFrom}
                         </option>
                      ))}
                   </Dropdown>
                   <LightText> To </LightText>
                   <Dropdown
-                     value={schedulment.selectedTimingTo}
-                     onChange={(e) => setSchedulment({ ...schedulment, selectedTimingTo: e.target.value })}
+                     value={schedulement.selectedTimingTo}
+                     onChange={(e) => updateCampaign({ ...campaign, schedulement: { ...schedulement, selectedTimingTo: e.target.value } })}
                   >
-                     {schedulment.timingTo.map((time) => (
-                        <option value={time} key={time}>
-                           {time}
+                     {schedulement.timingTo.map((timeTo: string) => (
+                        <option value={timeTo} key={timeTo}>
+                           {timeTo}
                         </option>
                      ))}
                   </Dropdown>
@@ -92,10 +81,13 @@ const Schedule = (): JSX.Element => {
 
             <TimezoneContainer>
                <BoldText>Timezone</BoldText>
-               <Dropdown value={schedulment.selectedTimezone} onChange={(e) => setSchedulment({ ...schedulment, selectedTimezone: e.target.value })}>
-                  {schedulment.timezones.map((time) => (
-                     <option value={time} key={time}>
-                        {time}
+               <Dropdown
+                  value={schedulement.selectedTimezone}
+                  onChange={(e) => updateCampaign({ ...campaign, schedulement: { ...schedulement, selectedTimezone: e.target.value } })}
+               >
+                  {schedulement.timezones.map((timzone: string) => (
+                     <option value={timzone} key={timzone}>
+                        {timzone}
                      </option>
                   ))}
                </Dropdown>
@@ -107,12 +99,12 @@ const Schedule = (): JSX.Element => {
                <span></span>
             </SectionSubHeadingContainer>
             <DaysContainer>
-               {schedulment.days.map((day) => (
+               {schedulement.days.map((day: string) => (
                   <Label>
                      <CheckboxInput
                         type="checkbox"
-                        checked={schedulment.selectedDays.includes(day)}
-                        onChange={(e) => handleSelectedDays(day, !schedulment.selectedDays.includes(day))}
+                        checked={schedulement.selectedDays.includes(day)}
+                        onChange={(e) => handleSelectedDays(day, !schedulement.selectedDays.includes(day))}
                         key={day}
                      />
                      <LightText>{day}</LightText>

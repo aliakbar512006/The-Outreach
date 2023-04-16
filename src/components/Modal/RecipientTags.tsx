@@ -1,20 +1,26 @@
-import { useState, KeyboardEvent, Dispatch, SetStateAction } from "react";
+import { KeyboardEvent, Dispatch, SetStateAction } from "react";
 
 import styled from "styled-components";
 
 import recipientLogo from "../../assets/images/recipient-logo.png";
 
 type TagsProps = {
-   tags: string[];
    inputType?: string;
    bulkRecipients?: string;
    setBulkRecipients: Dispatch<SetStateAction<string>>;
    showRecipientModal: (e: React.MouseEvent) => void;
+   currentRecepients: string[];
+   setCurrentRecepients: Dispatch<SetStateAction<string[]>>;
 };
 
-const RecipientTags = ({ tags, inputType, bulkRecipients, setBulkRecipients, showRecipientModal }: TagsProps): JSX.Element => {
-   const [currentRecepients, setCurrentRecepients] = useState<string[]>(tags);
-
+const RecipientTags = ({
+   inputType,
+   bulkRecipients,
+   setBulkRecipients,
+   showRecipientModal,
+   currentRecepients,
+   setCurrentRecepients,
+}: TagsProps): JSX.Element => {
    const removeTags = (indexToRemove: number): void => {
       if (inputType === "bulk") setBulkRecipients("");
       else setCurrentRecepients([...currentRecepients.filter((_, index) => index !== indexToRemove)]);
@@ -112,6 +118,7 @@ const RecipientLogo = styled.img`
    right: 5px;
    width: 22px;
    height: 22px;
+   cursor: pointer;
 `;
 
 const TagCloseIcon = styled.span`

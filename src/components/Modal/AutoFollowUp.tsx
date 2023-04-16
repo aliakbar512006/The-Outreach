@@ -1,6 +1,10 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
 
 import styled from "styled-components";
+
+import { IStage, CampaignContextType, ICampaign } from "../../@types/campaign";
+
+import { CampaignContext } from "../../context/campaignContext";
 
 import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { FollowupContainer } from "../styles/ScheduleContainer.styled";
@@ -12,16 +16,6 @@ import { SectionHeadingContainer, SectionSubHeadingContainer } from "../styles/S
 
 import followUpImage from "../../assets/images/follow-up.png";
 import stageImage from "../../assets/images/stages.png";
-
-interface IStage {
-   no: number;
-   checked: boolean;
-   message: string;
-   actionTypes: string[];
-   selectedAction: string;
-   days: string;
-   selectedTextType: string;
-}
 
 var initializeStage = (no: number, days?: string): IStage => {
    return {
@@ -36,7 +30,7 @@ var initializeStage = (no: number, days?: string): IStage => {
 };
 
 const AutoFollowUp = (): JSX.Element => {
-   const [followUpStages, setFollowUpStages] = useState<IStage[]>([initializeStage(0)]);
+   const { campaign, updateCampaign } = useContext(CampaignContext) as CampaignContextType;
 
    return (
       <div>
@@ -45,8 +39,8 @@ const AutoFollowUp = (): JSX.Element => {
             <BoldText>Auto Follow-up</BoldText>
             <span></span>
          </SectionHeadingContainer>
-         {followUpStages.map((stage) => (
-            <Stage stage={stage} followUpStages={followUpStages} setFollowUpStages={setFollowUpStages} key={stage.no} />
+         {campaign.followUpStages.map((stage: IStage) => (
+            <Stage stage={stage} campaign={campaign} updateFollowUpStages={updateCampaign} key={stage.no} />
          ))}
       </div>
    );
@@ -54,27 +48,26 @@ const AutoFollowUp = (): JSX.Element => {
 
 type StageProps = {
    stage: IStage;
-   followUpStages: IStage[];
-   setFollowUpStages: Dispatch<SetStateAction<IStage[]>>;
+   campaign: ICampaign;
+   updateFollowUpStages: (updateCampaign: ICampaign) => void;
 };
-
-const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.Element => {
+const Stage = ({ stage, campaign, updateFollowUpStages }: StageProps): JSX.Element => {
    const changeInputState = (stateName: string, value: string | boolean): void => {
-      const prevStage = followUpStages;
-      prevStage[stage.no][stateName] = value;
-      setFollowUpStages([...prevStage]);
+      const prevStages = campaign.followUpStages;
+      prevStages[stage.no][stateName] = value;
+      updateFollowUpStages({ ...campaign, followUpStages: [...prevStages] });
    };
 
    const createNewStage = (): void => {
-      const prevStages = followUpStages;
+      const prevStages = campaign.followUpStages;
       prevStages[stage.no].checked = true;
-      setFollowUpStages([...prevStages, initializeStage(followUpStages.length, "2")]);
+      updateFollowUpStages({ ...campaign, followUpStages: [...prevStages, initializeStage(campaign.followUpStages.length, "2")] });
    };
 
    const removeStages = (): void => {
-      const updatedStages = followUpStages.slice(0, stage.no + 1);
+      const updatedStages = campaign.followUpStages.slice(0, stage.no + 1);
       updatedStages[stage.no].checked = false;
-      setFollowUpStages(updatedStages);
+      updateFollowUpStages({ ...campaign, followUpStages: [...updatedStages] });
    };
 
    const handleStages = (): void => {

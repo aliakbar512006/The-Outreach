@@ -1,4 +1,8 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
+
+import { CampaignContextType, ICampaign } from "../../@types/campaign.d";
+
+import { CampaignContext } from "../../context/campaignContext";
 
 import styled from "styled-components";
 
@@ -7,11 +11,8 @@ import { CheckboxInput } from "../styles/Checkbox.styled";
 import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
 
-// import trackingImage from "../../assets/images/tracking.png";
-
 const Tracking = (): JSX.Element => {
-   const [isOpenChecked, setIsOpenChecked] = useState<boolean>(true);
-   const [isClicksChecked, setIsClicksChecked] = useState<boolean>(true);
+   const { campaign, updateCampaign } = useContext(CampaignContext) as CampaignContextType;
 
    return (
       <div>
@@ -21,8 +22,8 @@ const Tracking = (): JSX.Element => {
             <span></span>
          </SectionHeadingContainer>
          <TrackingContainer>
-            <Checkbox label="Opens" checked={isOpenChecked} setIsChecked={setIsOpenChecked} />
-            <Checkbox label="Clicks" checked={isClicksChecked} setIsChecked={setIsClicksChecked} />
+            <Checkbox label="Open" checked={campaign.trackingType.isOpen} campaign={campaign} updateCampaign={updateCampaign} />
+            <Checkbox label="Click" checked={campaign.trackingType.isClick} campaign={campaign} updateCampaign={updateCampaign} />
          </TrackingContainer>
       </div>
    );
@@ -31,14 +32,19 @@ const Tracking = (): JSX.Element => {
 type CheckboxProps = {
    label: string;
    checked: boolean;
-   setIsChecked: Dispatch<SetStateAction<boolean>>;
+   campaign: ICampaign;
+   updateCampaign: (updateCampaign: ICampaign) => void;
 };
 
-const Checkbox = ({ label, checked, setIsChecked }: CheckboxProps) => {
+const Checkbox = ({ label, checked, campaign, updateCampaign }: CheckboxProps) => {
    return (
       <>
          <Label>
-            <CheckboxInput type="checkbox" checked={checked} onChange={() => setIsChecked((prev: boolean) => !prev)} />
+            <CheckboxInput
+               type="checkbox"
+               checked={checked}
+               onChange={() => updateCampaign({ ...campaign, trackingType: { ...campaign.trackingType, [`is${label}`]: !checked } })}
+            />
             <span className="checkmark"></span>
             <LightText>{label}</LightText>
          </Label>
