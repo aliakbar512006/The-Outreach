@@ -26,11 +26,11 @@ export const GlobalStyles = createGlobalStyle`
     
     @font-face {
         font-family: "Poppins-Reguar";
-        src: local("Poppins-Regular"), url(../../assets/fonts/Poppins/Poppins-Regular.woff) format("woff");
+        src: local("Montserrat-Regular"), url(../../assets/fonts/Poppins/Montserrat-Regular.woff) format("woff");
     }
     
     @font-face {
-        font-family: "Poppins-SemiBold";
-        src: local("Poppins-SemiBold"), url(../../assets/fonts/Poppins/Poppins-SemiBold.woff) format("woff");
+        font-family: "Montserrat-SemiBold";
+        src: local("Montserrat-SemiBold"), url(../../assets/fonts/Poppins/Montserrat-SemiBold.woff) format("woff");
     } 
 `

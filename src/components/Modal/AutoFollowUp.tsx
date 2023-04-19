@@ -8,9 +8,10 @@ import { Dropdown } from "../styles/Dropdown.styled";
 import { CheckboxInput } from "../styles/Checkbox.styled";
 import { FollowUpLabel } from "../styles/LabelVariants.styled";
 import { RadioInput } from "../styles/Radio.styled";
-import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
+import { SectionHeadingContainer, SectionSubHeadingContainer } from "../styles/SectionHeadingContainer.styled";
 
 import followUpImage from "../../assets/images/follow-up.png";
+import stageImage from "../../assets/images/stages.png";
 
 interface IStage {
    no: number;
@@ -42,6 +43,7 @@ const AutoFollowUp = (): JSX.Element => {
          <SectionHeadingContainer>
             <img src={followUpImage} alt="follow-up img" />
             <BoldText>Auto Follow-up</BoldText>
+            <span></span>
          </SectionHeadingContainer>
          {followUpStages.map((stage) => (
             <Stage stage={stage} followUpStages={followUpStages} setFollowUpStages={setFollowUpStages} key={stage.no} />
@@ -82,9 +84,11 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
 
    return (
       <>
-         <StageHeading>
-            <BoldText>Stage {stage.no + 1} :</BoldText>
-         </StageHeading>
+         <SectionSubHeadingContainer>
+            <img src={stageImage} alt="timing img" />
+            <BoldText>Stage {stage.no + 1}</BoldText>
+            <span></span>
+         </SectionSubHeadingContainer>
          <FollowupContainer>
             <CheckboxInput type="checkbox" checked={stage.checked} onChange={() => handleStages()} />
             <LightText>If</LightText>
@@ -101,12 +105,23 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
          {stage.checked && (
             <>
                <FollowUpLabel>
-                  <RadioInput type="radio" name={`radio ${stage.no}`} value="plain text" defaultChecked onChange={(e) => changeInputState("selectedTextType", e.target.value)} />
+                  <RadioInput
+                     type="radio"
+                     name={`radio ${stage.no}`}
+                     value="plain text"
+                     defaultChecked
+                     onChange={(e) => changeInputState("selectedTextType", e.target.value)}
+                  />
                   <LightText>Send text above original:</LightText>
                </FollowUpLabel>
                <TextArea rows={3} cols={8} value={stage.message} onChange={(e) => changeInputState("message", e.target.value)} />
                <FollowUpLabel>
-                  <RadioInput type="radio" name={`radio ${stage.no}`} value="rich text" onChange={(e) => changeInputState("selectedTextType", e.target.value)} />
+                  <RadioInput
+                     type="radio"
+                     name={`radio ${stage.no}`}
+                     value="rich text"
+                     onChange={(e) => changeInputState("selectedTextType", e.target.value)}
+                  />
                   <LightText>Send rich-text email in same thread</LightText>
                </FollowUpLabel>
             </>
@@ -115,18 +130,16 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
    );
 };
 
-const StageHeading = styled.div`
-   margin-top: 15px;
-   font-size: 12px;
-`;
-
 const TextArea = styled.textarea`
-   margin: 10px 30px;
    width: 90%;
-   padding: 5px 10px;
-   font-family: "Poppins-Regular";
+   display: flex;
+   justify-content: center;
+   margin: 10px 20px;
+   padding: 10px 20px;
+   font-family: "Montserrat-Regular";
    font-size: 12.5px;
    resize: none;
+   border-radius: 45px;
 `;
 
 export default AutoFollowUp;

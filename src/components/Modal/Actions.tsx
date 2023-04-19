@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 
 import styled from "styled-components";
 
@@ -7,14 +7,15 @@ import { Label } from "../styles/LabelVariants.styled";
 import { RadioInput } from "../styles/Radio.styled";
 import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
 
-import actionImage from "../../assets/images/action.png";
+// import actionImage from "../../assets/images/action.png";
 
 const Action = (): JSX.Element => {
    return (
       <div>
          <SectionHeadingContainer>
-            <img src={actionImage} alt="action img" />
+            <span></span>
             <BoldText>Action</BoldText>
+            <span></span>
          </SectionHeadingContainer>
          <ActionContainer>
             <Radio label="Send Email" value="send" />
@@ -32,8 +33,6 @@ type RadioProps = {
 const Radio = ({ label, value }: RadioProps) => {
    const [mailType, setMailType] = useState<string>("send");
 
-   console.log(mailType);
-
    return (
       <>
          <Label>
@@ -50,5 +49,5 @@ const ActionContainer = styled.div`
    padding: 10px 0px;
    display: flex;
    column-gap: 20px;
-   justify-content: flex-start;
+   justify-content: center;
 `;

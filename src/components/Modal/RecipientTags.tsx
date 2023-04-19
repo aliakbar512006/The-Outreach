@@ -1,16 +1,23 @@
-import { useState, KeyboardEvent } from "react";
+import { useState, KeyboardEvent, Dispatch, SetStateAction } from "react";
 
 import styled from "styled-components";
 
+import recipientLogo from "../../assets/images/recipient-logo.png";
+
 type TagsProps = {
    tags: string[];
+   inputType?: string;
+   bulkRecipients?: string;
+   setBulkRecipients: Dispatch<SetStateAction<string>>;
+   showRecipientModal: (e: React.MouseEvent) => void;
 };
 
-const RecipientTags = ({ tags }: TagsProps): JSX.Element => {
+const RecipientTags = ({ tags, inputType, bulkRecipients, setBulkRecipients, showRecipientModal }: TagsProps): JSX.Element => {
    const [currentRecepients, setCurrentRecepients] = useState<string[]>(tags);
 
    const removeTags = (indexToRemove: number): void => {
-      setCurrentRecepients([...currentRecepients.filter((_, index) => index !== indexToRemove)]);
+      if (inputType === "bulk") setBulkRecipients("");
+      else setCurrentRecepients([...currentRecepients.filter((_, index) => index !== indexToRemove)]);
    };
 
    const addTags = (event: KeyboardEvent<HTMLInputElement>): void => {
@@ -20,17 +27,26 @@ const RecipientTags = ({ tags }: TagsProps): JSX.Element => {
          target.value = "";
       }
    };
+
    return (
       <RecipientInput>
          <Tags>
-            {currentRecepients.map((tag, index) => (
-               <Tag key={index}>
-                  <span>{tag}</span>
-                  <TagCloseIcon onClick={() => removeTags(index)}>x</TagCloseIcon>
+            {inputType === "bulk" ? (
+               <Tag>
+                  <span>{bulkRecipients?.split("\n").length}recipients-outreach.co</span>
+                  <TagCloseIcon onClick={() => removeTags(0)}>x</TagCloseIcon>
                </Tag>
-            ))}
+            ) : (
+               currentRecepients.map((tag, index) => (
+                  <Tag key={index}>
+                     <span>{tag}</span>
+                     <TagCloseIcon onClick={() => removeTags(index)}>x</TagCloseIcon>
+                  </Tag>
+               ))
+            )}
          </Tags>
          <input type="text" onKeyUp={(event) => (event.key === "Enter" ? addTags(event) : null)} />
+         <RecipientLogo src={recipientLogo} alt="import recipient logo" onClick={(e) => showRecipientModal(e)} />
       </RecipientInput>
    );
 };
@@ -38,22 +54,25 @@ const RecipientTags = ({ tags }: TagsProps): JSX.Element => {
 export default RecipientTags;
 
 const RecipientInput = styled.div`
+   position: relative;
    display: flex;
    align-items: center;
    flex-wrap: wrap;
    min-height: 30px;
    width: 480px;
    padding: 0 8px;
-   border: 1px solid rgb(214, 216, 218);
-   border-radius: 6px;
+   border: 1px solid ${({ theme }) => theme.colors.borderColor};
+   border-radius: 5px;
+
    &:focus-within {
-      border: 1px solid #0052cc;
+      border: 1.5px solid ${({ theme }) => theme.colors.borderColor};
    }
    input {
       flex: 1;
       border: none;
       height: 30px;
       font-size: 14px;
+
       padding: 5px 0 5px 0;
       &:focus {
          outline: transparent;
@@ -85,6 +104,14 @@ const Tag = styled.li`
    border-radius: 30px;
    margin: 0 8px 8px 0;
    background: #e4e2f4;
+`;
+
+const RecipientLogo = styled.img`
+   position: absolute;
+   top: 5px;
+   right: 5px;
+   width: 22px;
+   height: 22px;
 `;
 
 const TagCloseIcon = styled.span`

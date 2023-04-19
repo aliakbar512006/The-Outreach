@@ -8,27 +8,45 @@ import Schedule from "./Schedule";
 
 import styled from "styled-components";
 
-import { BoldText } from "../styles/TextVariants.styled";
+import { BolderText } from "../styles/TextVariants.styled";
 import { Button } from "../styles/ButtonVariants.styled";
 
 type ModalProps = {
    children?: string;
    modalState: boolean;
    setModalState: Dispatch<SetStateAction<boolean>>;
+   setRecipientModalState: Dispatch<SetStateAction<boolean>>;
+   bulkRecipients: string;
+   inputType: string;
+   setBulkRecipients: Dispatch<SetStateAction<string>>;
 };
 
-const Modal = ({ children, modalState, setModalState }: ModalProps): JSX.Element => {
+const Modal = ({
+   children,
+   modalState,
+   setModalState,
+   setRecipientModalState,
+   bulkRecipients,
+   inputType,
+   setBulkRecipients,
+}: ModalProps): JSX.Element => {
    const onClose = (e: React.MouseEvent): void => setModalState(false);
 
    if (!modalState) return <></>;
    return (
       <>
          <ModalContainer>
-            <Header />
+            <Header>
+               <BolderText>The Outreach</BolderText>
+            </Header>
             <Content>
-               <TestEmailBar />
+               <TestEmailBar
+                  setRecipientModalState={setRecipientModalState}
+                  bulkRecipients={bulkRecipients}
+                  inputType={!!bulkRecipients.length ? "bulk" : ""}
+                  setBulkRecipients={setBulkRecipients}
+               />
                <>
-                  <BoldText> Settings: </BoldText>
                   <SettingsBoxContent>
                      <Tracking />
                      <Action />
@@ -48,11 +66,12 @@ const Modal = ({ children, modalState, setModalState }: ModalProps): JSX.Element
 export default Modal;
 
 const ModalContainer = styled.div`
-   width: 500px;
-   max-height: 95vh;
+   width: 550px;
    overflow-y: auto; // for scroll bars
+   max-height: 95vh;
    background: white;
-   border: 1px solid #ccc;
+   border: 1.5px solid ${({ theme }) => theme.colors.borderColor};
+   border-radius: 45px 45px 45px 0px;
    transition: 1.1s ease-out;
    box-shadow: -2rem 2rem 2rem rgba(black, 0.2);
    filter: blur(0);
@@ -69,31 +88,34 @@ const ModalContainer = styled.div`
    @media (prefers-reduced-motion) {
       offset-path: none;
    }
+
+   @media (max-width: 570px) {
+      max-width: 98%;
+   }
 `;
 
 const Header = styled.div`
-   background-color: #2a168d;
-   height: 70px;
-   width: 100%;
+   margin: 30px 0 10px 0;
+   text-align: center;
+   font-size: 30px;
 `;
 
 const Content = styled.div`
-   padding: 1rem;
+   padding: 1rem 2rem;
+   overflow-y: auto;
 `;
 
 const SettingsBoxContent = styled.div`
    margin-top: 20px;
    & > div {
-      border: 1px solid rgb(170, 165, 165);
-      border-radius: 4px;
-      margin: 5px 0px;
+      border: 1.5px solid ${({ theme }) => theme.colors.borderColor};
+      border-radius: 45px;
+      margin: 15px 0px;
       padding: 10px;
-      background-color: #f6f6f6;
    }
 `;
 
 const CloseAction = styled.div`
-   border-top: 1px solid #ccc;
-   background: #eee;
-   padding: 0.5rem 1rem;
+   border-top: 1px solid ${({ theme }) => theme.colors.borderColor};
+   padding: 0.5rem 2rem;
 `;

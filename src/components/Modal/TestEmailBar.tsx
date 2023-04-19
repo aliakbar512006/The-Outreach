@@ -1,3 +1,5 @@
+import { SetStateAction, Dispatch } from "react";
+
 import RecipientTags from "./RecipientTags";
 
 import styled from "styled-components";
@@ -5,12 +7,27 @@ import styled from "styled-components";
 import { LightText } from "../styles/TextVariants.styled";
 import { TestEmailButton } from "../styles/ButtonVariants.styled";
 
-const TestEmailBar = (): JSX.Element => {
+type TestEmailBarProps = {
+   setRecipientModalState: Dispatch<SetStateAction<boolean>>;
+   bulkRecipients: string;
+   inputType: string;
+   setBulkRecipients: Dispatch<SetStateAction<string>>;
+};
+
+const TestEmailBar = ({ setRecipientModalState, bulkRecipients, inputType, setBulkRecipients }: TestEmailBarProps): JSX.Element => {
+   const showModal = (e: React.MouseEvent): void => setRecipientModalState(true);
+
    return (
       <>
-         <LightText>Send Test Email</LightText>
+         <LightText>Send Emails</LightText>
          <TestEmailContainer>
-            <RecipientTags tags={["dev@gmail.com"]} />
+            <RecipientTags
+               tags={["dev@gmail.com"]}
+               bulkRecipients={bulkRecipients}
+               inputType={inputType}
+               setBulkRecipients={setBulkRecipients}
+               showRecipientModal={showModal}
+            />
             <TestEmailButton> Send Test </TestEmailButton>
          </TestEmailContainer>
       </>
