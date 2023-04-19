@@ -3,6 +3,8 @@ import { useState } from "react";
 import Modal from "./components/Modal";
 import FileUploadModal from "./components/Modal/FileUploadModal";
 
+import CampaignProvider from "./context/campaignContext";
+
 import styled from "styled-components";
 
 import { ThemeProvider } from "styled-components";
@@ -26,7 +28,7 @@ const App = (): JSX.Element => {
 
    return (
       <ThemeProvider theme={theme}>
-         <>
+         <CampaignProvider>
             <GlobalStyles />
             <Container>
                <OutreachButton onClick={(e) => showModal(e)}>Outreach</OutreachButton>
@@ -51,7 +53,7 @@ const App = (): JSX.Element => {
                   </Overlay>
                )}
             </Container>
-         </>
+         </CampaignProvider>
       </ThemeProvider>
    );
 };

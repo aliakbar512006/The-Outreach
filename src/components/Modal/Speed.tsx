@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useContext } from "react";
+
+import { CampaignContextType } from "../../@types/campaign";
+
+import { CampaignContext } from "../../context/campaignContext";
 
 import { LightText, BoldText } from "../styles/TextVariants.styled";
 import { SpeedConfigContainer } from "../styles/ScheduleContainer.styled";
@@ -9,20 +13,9 @@ import { SectionSubHeadingContainer } from "../styles/SectionHeadingContainer.st
 
 import speedImage from "../../assets/images/speed.png";
 
-interface IScheduledSpeed {
-   noOfEmails: string;
-   isPaused: boolean;
-   pausedTimings: string[];
-   selectedOauseTiming: string;
-}
-
 const SchduledSpeed = (): JSX.Element => {
-   const [speedConfigs, setSpeedConfigs] = useState<IScheduledSpeed>({
-      noOfEmails: "2",
-      isPaused: true,
-      pausedTimings: ["5 to 10 seconds", "10 to 60 seconds", "1 to 5 minutes"],
-      selectedOauseTiming: "5 to 10 seconds",
-   });
+   const { campaign, updateCampaign } = useContext(CampaignContext) as CampaignContextType;
+   const { schedulementSpeed } = campaign;
 
    return (
       <div>
@@ -33,24 +26,28 @@ const SchduledSpeed = (): JSX.Element => {
          </SectionSubHeadingContainer>
          <SpeedConfigContainer>
             <LightText>Send</LightText>
-            <input type="text" value={speedConfigs.noOfEmails} onChange={(e) => setSpeedConfigs({ ...speedConfigs, noOfEmails: e.target.value })} />
+            <input
+               type="text"
+               value={schedulementSpeed.noOfEmails}
+               onChange={(e) => updateCampaign({ ...campaign, schedulementSpeed: { ...schedulementSpeed, noOfEmails: e.target.value } })}
+            />
             <LightText>emails / day</LightText>
          </SpeedConfigContainer>
          <SpeedConfigContainer>
             <SpeedLabel>
                <CheckboxInput
                   type="checkbox"
-                  checked={!speedConfigs.isPaused}
-                  onChange={() => setSpeedConfigs({ ...speedConfigs, isPaused: !speedConfigs.isPaused })}
+                  checked={!schedulementSpeed.isPaused}
+                  onChange={() => updateCampaign({ ...campaign, schedulementSpeed: { ...schedulementSpeed, isPaused: !schedulementSpeed.isPaused } })}
                />
                <LightText>Pause</LightText>
             </SpeedLabel>
             <Dropdown
-               value={speedConfigs.selectedOauseTiming}
-               disabled={speedConfigs.isPaused}
-               onChange={(e) => setSpeedConfigs({ ...speedConfigs, selectedOauseTiming: e.target.value })}
+               value={schedulementSpeed.selectedOauseTiming}
+               disabled={schedulementSpeed.isPaused}
+               onChange={(e) => updateCampaign({ ...campaign, schedulementSpeed: { ...schedulementSpeed, selectedPauseTiming: e.target.value } })}
             >
-               {speedConfigs.pausedTimings.map((opt) => (
+               {schedulementSpeed.pausedTimings.map((opt: string) => (
                   <option value={opt} key={opt}>
                      {opt}
                   </option>
