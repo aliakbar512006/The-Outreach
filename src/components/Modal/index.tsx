@@ -21,7 +21,7 @@ type ModalProps = {
    setBulkRecipients: Dispatch<SetStateAction<string>>;
 };
 
-const Modal = ({
+export const Modal = ({
    children,
    modalState,
    setModalState,

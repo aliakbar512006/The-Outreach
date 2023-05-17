@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { BolderText, LightText } from "../styles/TextVariants.styled";
 import { Button } from "../styles/ButtonVariants.styled";
+import { useAuth } from "../../context/authcontext";
 
 type ModalProps = {
    modalState: boolean;
@@ -12,8 +13,9 @@ type ModalProps = {
    seRecipientsInputType: Dispatch<SetStateAction<string>>;
 };
 
-const FileUploadModal = ({ modalState, setModalState, setBulkRecipients, seRecipientsInputType }: ModalProps): JSX.Element => {
+export const FileUploadModal = ({ modalState, setModalState, setBulkRecipients, seRecipientsInputType }: ModalProps): JSX.Element => {
    const onClose = (e: MouseEvent): void => setModalState(false);
+   const {formData,setFormData} = useAuth()
 
    const [recipients, setRecipients] = useState<string>("");
 
@@ -22,6 +24,37 @@ const FileUploadModal = ({ modalState, setModalState, setBulkRecipients, seRecip
       setBulkRecipients(recipients);
       onClose(e);
    };
+
+   const readFileContents = (file:any) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+        reader.readAsText(file);
+      });
+    };
+
+    const convertToArray = (text:any) => {
+      const emailRegex = /[\w.-]+@[\w.-]+\.[\w.-]+/g;
+      const matches = text.match(emailRegex);
+      return matches || [];
+    };
+
+   const handleFileChange = async (e:any) => {
+      const file = e.target.files[0];
+    
+      try {
+        const text = await readFileContents(file);
+        const emails = convertToArray(text);
+        setFormData({...formData,  emailList:[...formData.emailList, ...emails]}) // Output the array of emails
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    };
+
+  
+    
+    
 
    if (!modalState) return <></>;
    return (
@@ -33,8 +66,9 @@ const FileUploadModal = ({ modalState, setModalState, setBulkRecipients, seRecip
             </Header>
             <Content>
                <LightText>Please enter line separated emails</LightText>
-               <TextArea rows={17} cols={15} value={recipients} onChange={(e) => setRecipients(e.target.value)} />
+               <TextArea rows={17} cols={15} value={formData.emailList} onChange={(e) => setRecipients(e.target.value)} />
                <Button onClick={(e) => importEmails(e)}>Import</Button>
+               <input type="file" onChange={handleFileChange} />
             </Content>
          </ModalContainer>
       </>

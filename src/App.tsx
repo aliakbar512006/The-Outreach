@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Modal from "./components/Modal";
 import FileUploadModal from "./components/Modal/FileUploadModal";
@@ -8,6 +8,12 @@ import styled from "styled-components";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./components/styles/Global";
 import { OutreachButton } from "./components/styles/ButtonVariants.styled";
+import { apiGet } from "./utils/axios";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Social from "./components/Social";
+import Dashboard from "./components/Dashboard";
+import Login from "./components/Login";
+import DataProvider from "./context/authcontext";
 
 const theme = {
    colors: {
@@ -16,7 +22,7 @@ const theme = {
    },
 };
 
-const App = (): JSX.Element => {
+const App = (): any => {
    const [modalState, setModalState] = useState<boolean>(false);
    const [recipientModalState, setRecipientModalState] = useState<boolean>(false);
    const [bulkRecipients, setBulkRecipients] = useState<string>("");
@@ -24,48 +30,47 @@ const App = (): JSX.Element => {
 
    const showModal = (e: React.MouseEvent): void => setModalState(true);
 
+   const handleClick = () => {
+      window.location.href = process.env.REACT_APP_REDIRECT!
+   }
+
+   useEffect(() => {
+       if (window.location.pathname === "/dashboard") {
+         setModalState(!modalState);
+      }
+   }, [])
+
+
    return (
+      <DataProvider>
       <ThemeProvider theme={theme}>
-         <>
+         
+             <Login show={modalState} click={handleClick}/> 
+           
+            
+           
             <GlobalStyles />
-            <Container>
-               <OutreachButton onClick={(e) => showModal(e)}>Outreach</OutreachButton>
-               <Modal
-                  modalState={modalState}
-                  setModalState={setModalState}
-                  setRecipientModalState={setRecipientModalState}
-                  bulkRecipients={bulkRecipients}
-                  setBulkRecipients={setBulkRecipients}
-                  inputType={recipientsInputType}
-               >
-                  Message in Modal
-               </Modal>
-               {recipientModalState && (
-                  <Overlay>
-                     <FileUploadModal
-                        modalState={recipientModalState}
-                        setModalState={setRecipientModalState}
-                        setBulkRecipients={setBulkRecipients}
-                        seRecipientsInputType={seRecipientsInputType}
-                     />
-                  </Overlay>
-               )}
-            </Container>
-         </>
+               <Routes>
+                  {/* <Route path="/" element={<Login />} /> */}
+                  <Route path="/social/*" element={<Social />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+               </Routes>
+   
       </ThemeProvider>
+      </DataProvider>
    );
 };
 
 export default App;
 
-const Container = styled.div`
+export const Container = styled.div`
    display: flex;
    height: 100vh;
    justify-content: center;
    align-items: center;
 `;
 
-const Overlay = styled.div`
+export const Overlay = styled.div`
    position: absolute;
    inset: 0;
    display: flex;

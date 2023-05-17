@@ -3,6 +3,7 @@ import { useState, KeyboardEvent, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 import recipientLogo from "../../assets/images/recipient-logo.png";
+import { useAuth } from "../../context/authcontext";
 
 type TagsProps = {
    tags: string[];
@@ -14,16 +15,24 @@ type TagsProps = {
 
 const RecipientTags = ({ tags, inputType, bulkRecipients, setBulkRecipients, showRecipientModal }: TagsProps): JSX.Element => {
    const [currentRecepients, setCurrentRecepients] = useState<string[]>(tags);
+   const {formData, setFormData} = useAuth()
+
+
 
    const removeTags = (indexToRemove: number): void => {
       if (inputType === "bulk") setBulkRecipients("");
-      else setCurrentRecepients([...currentRecepients.filter((_, index) => index !== indexToRemove)]);
+      else {
+         setCurrentRecepients([...currentRecepients.filter((_, index) => index !== indexToRemove)]);
+         setFormData({...formData, emailList: [...currentRecepients.filter((_, index) => index !== indexToRemove)]})
+      }
+
    };
 
    const addTags = (event: KeyboardEvent<HTMLInputElement>): void => {
       const target = event.target as HTMLInputElement;
       if (target?.value !== "") {
          setCurrentRecepients([...currentRecepients, target.value]);
+         setFormData({...formData, emailList: [...currentRecepients, target.value]})
          target.value = "";
       }
    };

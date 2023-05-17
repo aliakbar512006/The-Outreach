@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 import styled from "styled-components";
 
@@ -6,12 +6,25 @@ import { Label } from "../styles/LabelVariants.styled";
 import { CheckboxInput } from "../styles/Checkbox.styled";
 import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
+import { useAuth } from "../../context/authcontext";
 
 // import trackingImage from "../../assets/images/tracking.png";
 
 const Tracking = (): JSX.Element => {
    const [isOpenChecked, setIsOpenChecked] = useState<boolean>(true);
    const [isClicksChecked, setIsClicksChecked] = useState<boolean>(true);
+
+   const {formData, setFormData} = useAuth();
+
+   const handleTracking = () => {
+      setFormData({...formData, tracking: {
+         ...formData.tracking, isOpened: isOpenChecked, isClicked: isClicksChecked
+      }})
+   }
+
+  useEffect(() => {
+    handleTracking();
+   }, [isOpenChecked, isClicksChecked]);
 
    return (
       <div>
@@ -21,8 +34,8 @@ const Tracking = (): JSX.Element => {
             <span></span>
          </SectionHeadingContainer>
          <TrackingContainer>
-            <Checkbox label="Opens" checked={isOpenChecked} setIsChecked={setIsOpenChecked} />
-            <Checkbox label="Clicks" checked={isClicksChecked} setIsChecked={setIsClicksChecked} />
+            <Checkbox label="Opens" checked={isOpenChecked} setIsChecked={setIsOpenChecked}  />
+            <Checkbox label="Clicks" checked={isClicksChecked} setIsChecked={setIsClicksChecked}  />
          </TrackingContainer>
       </div>
    );

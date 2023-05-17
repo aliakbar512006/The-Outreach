@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import SchduledSpeed from "./Speed";
 import ScheduledRepeat from "./Repeat";
@@ -15,6 +15,21 @@ import { SectionHeadingContainer, SectionSubHeadingContainer } from "../styles/S
 import scheduleImage from "../../assets/images/schedule.png";
 import timingImage from "../../assets/images/timing.png";
 import dayImage from "../../assets/images/day.png";
+import { useAuth } from "../../context/authcontext";
+
+interface IScheduledSpeed {
+   noOfEmails: string;
+   isPaused: boolean;
+   pausedTimings: string[];
+   selectedOauseTiming: string;
+}
+
+interface IScheduledRepeat {
+   isRepeatChecked: boolean;
+   repeatCount: string;
+   repeatTimings: string[];
+   selectedRpeatTimings: string;
+}
 
 interface ISchedule {
    timingFrom: string[];
@@ -25,19 +40,57 @@ interface ISchedule {
    selectedTimezone: string;
    days: string[];
    selectedDays: string[];
+   speed: IScheduledSpeed;
+   repeat: IScheduledRepeat;
 }
 
 const Schedule = (): JSX.Element => {
+   const {formData, setFormData} = useAuth()
+
    const [schedulment, setSchedulment] = useState<ISchedule>({
-      timingFrom: ["8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"],
-      selectedTimingFrom: "8 PM",
-      timingTo: ["8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"],
-      selectedTimingTo: "9:00 PM",
+      timingFrom: ["8:00:00", "9:00:00", "10:00:00", "11:00:00"],
+      selectedTimingFrom: "8:00:00",
+      timingTo: ["8:00:00", "9:00:00", "10:00:00", "11:00:00"],
+      selectedTimingTo: "9:00:00",
       timezones: ["Eastern Time (US and Canada) (UTC - 5:00)"],
       selectedTimezone: "Eastern Time (US and Canada) (UTC - 5:00)",
       days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       selectedDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      speed:{
+         noOfEmails: "2",
+         isPaused: true,
+         pausedTimings: ["5 to 10 seconds", "10 to 60 seconds", "1 to 5 minutes"],
+         selectedOauseTiming: "5 to 10 seconds",
+      },
+      repeat:{
+         repeatCount: "1",
+         isRepeatChecked: true,
+         repeatTimings: ["Day", "Hour", "Week", "Month"],
+         selectedRpeatTimings: "Day",
+      }
    });
+
+   const handleTimeFormat = (time: string): string => {
+      const format = time.split(" ")[0] + ":00"
+      return format
+   }
+
+
+  const convertToTimezone = async () => {
+   try {
+     const response = await fetch('https://worldtimeapi.org/api/timezone/')
+     const data = await response.json()
+     setSchedulment({...schedulment, timezones: data})
+   } catch (error:any) {
+     console.error(error);
+   }
+ };
+
+   
+ useEffect(() => {
+   convertToTimezone()
+   }, [])
+
 
    const handleSelectedDays = (selectedDay: string, dayState: boolean): void => {
       if (dayState === true) setSchedulment({ ...schedulment, selectedDays: [...schedulment.selectedDays, selectedDay] });
@@ -46,9 +99,27 @@ const Schedule = (): JSX.Element => {
             ...schedulment,
             selectedDays: [...schedulment.selectedDays.filter((_, index) => index !== schedulment.selectedDays.indexOf(selectedDay))],
          });
-
-      console.log(schedulment.selectedDays);
    };
+
+
+   const handleSchedule = (schedule:ISchedule): void => {
+      setFormData({...formData, schedule:{
+         start: schedule.selectedTimingFrom,
+         end: schedule.selectedTimingTo,
+         days: schedule.selectedDays,
+         timezone: schedule.selectedTimezone,
+         speed:{
+            mailsPerDay:schedule.speed.noOfEmails,
+            delay:schedule.speed.selectedOauseTiming
+         },
+         repeat:schedule.repeat.repeatCount
+      }})
+      
+   }
+
+   useEffect(() => {
+      handleSchedule(schedulment)
+   }, [schedulment])
 
    return (
       <div>
@@ -93,7 +164,7 @@ const Schedule = (): JSX.Element => {
             <TimezoneContainer>
                <BoldText>Timezone</BoldText>
                <Dropdown value={schedulment.selectedTimezone} onChange={(e) => setSchedulment({ ...schedulment, selectedTimezone: e.target.value })}>
-                  {schedulment.timezones.map((time) => (
+                  {schedulment.timezones.map((time:string, id:number) => (
                      <option value={time} key={time}>
                         {time}
                      </option>
@@ -121,9 +192,9 @@ const Schedule = (): JSX.Element => {
             </DaysContainer>
          </>
          <HRLineBreak />
-         <SchduledSpeed />
+         <SchduledSpeed state={schedulment} setState={setSchedulment} />
          <HRLineBreak />
-         <ScheduledRepeat />
+         <ScheduledRepeat state={schedulment} setState={setSchedulment} />
       </div>
    );
 };

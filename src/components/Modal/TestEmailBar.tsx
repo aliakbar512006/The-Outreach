@@ -1,11 +1,9 @@
 import { SetStateAction, Dispatch } from "react";
-
 import RecipientTags from "./RecipientTags";
-
 import styled from "styled-components";
-
 import { LightText } from "../styles/TextVariants.styled";
 import { TestEmailButton } from "../styles/ButtonVariants.styled";
+import { useAuth } from "../../context/authcontext";
 
 type TestEmailBarProps = {
    setRecipientModalState: Dispatch<SetStateAction<boolean>>;
@@ -17,6 +15,18 @@ type TestEmailBarProps = {
 const TestEmailBar = ({ setRecipientModalState, bulkRecipients, inputType, setBulkRecipients }: TestEmailBarProps): JSX.Element => {
    const showModal = (e: React.MouseEvent): void => setRecipientModalState(true);
 
+   const {createJobs, formData} = useAuth()
+
+   
+   const handleJobs = async(formData:FormData) =>{
+    
+      await createJobs(formData)
+   }
+
+   console.log(formData)
+   // useEffect(() => {
+   //    createJobs(formData)
+   // }, [formData])
    return (
       <>
          <LightText>Send Emails</LightText>
@@ -28,7 +38,7 @@ const TestEmailBar = ({ setRecipientModalState, bulkRecipients, inputType, setBu
                setBulkRecipients={setBulkRecipients}
                showRecipientModal={showModal}
             />
-            <TestEmailButton> Send Test </TestEmailButton>
+            <TestEmailButton onClick={() => handleJobs(formData)}> Send Test </TestEmailButton>
          </TestEmailContainer>
       </>
    );

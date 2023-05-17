@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { LightText, BoldText } from "../styles/TextVariants.styled";
 import { SpeedConfigContainer } from "../styles/ScheduleContainer.styled";
@@ -9,20 +9,28 @@ import { SectionSubHeadingContainer } from "../styles/SectionHeadingContainer.st
 
 import speedImage from "../../assets/images/speed.png";
 
-interface IScheduledSpeed {
+export interface IScheduledSpeed {
    noOfEmails: string;
    isPaused: boolean;
    pausedTimings: string[];
    selectedOauseTiming: string;
 }
 
-const SchduledSpeed = (): JSX.Element => {
+const SchduledSpeed = ({state, setState}:any): JSX.Element => {
    const [speedConfigs, setSpeedConfigs] = useState<IScheduledSpeed>({
       noOfEmails: "2",
       isPaused: true,
       pausedTimings: ["5 to 10 seconds", "10 to 60 seconds", "1 to 5 minutes"],
       selectedOauseTiming: "5 to 10 seconds",
    });
+
+   const handleSpeedConfigs = (speed:any) => {
+      setState({...state, speed: speed})
+   }
+
+   useEffect(() => {
+      handleSpeedConfigs(speedConfigs)
+   }, [speedConfigs])
 
    return (
       <div>

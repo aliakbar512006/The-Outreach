@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 import styled from "styled-components";
 
@@ -12,6 +12,7 @@ import { SectionHeadingContainer, SectionSubHeadingContainer } from "../styles/S
 
 import followUpImage from "../../assets/images/follow-up.png";
 import stageImage from "../../assets/images/stages.png";
+import { useAuth } from "../../context/authcontext";
 
 interface IStage {
    no: number;
@@ -46,7 +47,7 @@ const AutoFollowUp = (): JSX.Element => {
             <span></span>
          </SectionHeadingContainer>
          {followUpStages.map((stage) => (
-            <Stage stage={stage} followUpStages={followUpStages} setFollowUpStages={setFollowUpStages} key={stage.no} />
+            <Stage stage={stage} followUpStages={followUpStages} setFollowUpStages={setFollowUpStages} key={stage.no}  />
          ))}
       </div>
    );
@@ -59,10 +60,45 @@ type StageProps = {
 };
 
 const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.Element => {
+
+   const { formData, setFormData } = useAuth();
+
+   const [trigger, setTrigger] = useState<boolean>(false);
+
    const changeInputState = (stateName: string, value: string | boolean): void => {
-      const prevStage = followUpStages;
-      prevStage[stage.no][stateName] = value;
-      setFollowUpStages([...prevStage]);
+      followUpStages.map((elem: any, id: any) => {
+         if (id === stage.no) {
+            elem.selectedTextType = value;   
+            setTrigger(!trigger)
+         }
+      });
+   };
+
+   const dropDownState = (stateName: string, value: string | boolean): void => {
+      followUpStages.map((elem: any, id: any) => {
+         if (id === stage.no) {
+            elem.selectedAction = value;
+            setTrigger(!trigger)
+         }
+      });
+   };
+
+   const messageState = (stateName: string, value: string | boolean): void => {
+      followUpStages.map((elem: any, id: any) => {
+         if (id === stage.no) {
+            elem.message = value;
+            setTrigger(!trigger)
+         }
+      });
+   };
+
+   const dayState = (stateName: string, value: string | boolean): void => {
+      followUpStages.map((elem: any, id: any) => {
+         if (id === stage.no) {
+            elem.days = value;
+            setTrigger(!trigger)
+         }
+      });
    };
 
    const createNewStage = (): void => {
@@ -78,12 +114,53 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
    };
 
    const handleStages = (): void => {
-      if (!stage.checked) createNewStage();
-      else removeStages();
+      if (!stage.checked) {
+         createNewStage();
+         followUpStages.map((elem: any, id: any) => {
+            if (id === stage.no) {
+               elem.checked = true;
+            }
+         });
+      } else {
+         removeStages();
+         followUpStages.map((elem: any, id: any) => {
+            if (id === stage.no) {
+               elem.checked = false;
+            }
+         });
+      }
    };
 
+   const handleFollowUp = (): void => {
+      let followUp = [] as any[]
+      let followUpStage = {};
+      followUpStages.map((elem: any, id: any) => {
+         if(elem.checked === true){
+            followUpStage = {
+               "id": id,
+               "condition": elem.selectedAction,
+               "duration": elem.days,
+               "message": elem.message,
+               "sendType": elem.selectedTextType
+            }
+         }
+         followUp.push(followUpStage)
+         setFormData({...formData, autofollowup: followUp.slice(0, followUp.length - 1)})
+      }
+   )
+      
+   };
+
+
+
+   useEffect(() => {
+      handleFollowUp();
+   }, [trigger]);
+
+  
+
    return (
-      <>
+      <div>
          <SectionSubHeadingContainer>
             <img src={stageImage} alt="timing img" />
             <BoldText>Stage {stage.no + 1}</BoldText>
@@ -92,7 +169,7 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
          <FollowupContainer>
             <CheckboxInput type="checkbox" checked={stage.checked} onChange={() => handleStages()} />
             <LightText>If</LightText>
-            <Dropdown value={stage.selectedAction} onChange={(e) => changeInputState("selectedAction", e.target.value)}>
+            <Dropdown onChange={(e) => dropDownState("selectedAction", e.target.value)}>
                {stage.actionTypes.map((opt) => (
                   <option value={opt} key={opt}>
                      {opt}
@@ -100,7 +177,7 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
                ))}
             </Dropdown>
             <LightText>after</LightText>
-            <input type="string" value={stage.days} onChange={(e) => changeInputState("days", e.target.value)} />
+            <input type="text" placeholder={stage.days} onChange={(e) => dayState("days", e.target.value)} required />
          </FollowupContainer>
          {stage.checked && (
             <>
@@ -114,7 +191,7 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
                   />
                   <LightText>Send text above original:</LightText>
                </FollowUpLabel>
-               <TextArea rows={3} cols={8} value={stage.message} onChange={(e) => changeInputState("message", e.target.value)} />
+               <TextArea rows={3} cols={8} placeholder={`${stage.message}`} onChange={(e) => messageState("message", e.target.value)} required />
                <FollowUpLabel>
                   <RadioInput
                      type="radio"
@@ -126,7 +203,7 @@ const Stage = ({ stage, followUpStages, setFollowUpStages }: StageProps): JSX.El
                </FollowUpLabel>
             </>
          )}
-      </>
+      </div>
    );
 };
 

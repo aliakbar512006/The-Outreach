@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styled from "styled-components";
 
@@ -6,6 +6,8 @@ import { BoldText, LightText } from "../styles/TextVariants.styled";
 import { Label } from "../styles/LabelVariants.styled";
 import { RadioInput } from "../styles/Radio.styled";
 import { SectionHeadingContainer } from "../styles/SectionHeadingContainer.styled";
+import { set } from "immer/dist/internal";
+import  {useAuth} from "../../context/authcontext";
 
 // import actionImage from "../../assets/images/action.png";
 
@@ -31,12 +33,20 @@ type RadioProps = {
 };
 
 const Radio = ({ label, value }: RadioProps) => {
-   const [mailType, setMailType] = useState<string>("send");
+   const [mailType, setMailType] = useState<string>("");
+   const {formData, setFormData} = useAuth();
 
+
+   const handleMailType = (e:any) => {
+      const {value} = e.target
+      setFormData({...formData, action: value})
+   }
+
+  
    return (
       <>
          <Label>
-            <RadioInput type="radio" name="radio" defaultChecked={value === "send"} value={value} onChange={(e) => setMailType(value)} />
+            <RadioInput type="radio" name="radio"  value={value} onChange={(e) => handleMailType(e)} />
             <LightText>{label}</LightText>
          </Label>
       </>

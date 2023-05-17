@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { LightText, BoldText } from "../styles/TextVariants.styled";
 import { RepeatConfigContainer } from "../styles/ScheduleContainer.styled";
@@ -13,13 +13,21 @@ interface IScheduledRepeat {
    selectedRpeatTimings: string;
 }
 
-const ScheduledRepeat = (): JSX.Element => {
+const ScheduledRepeat = ({state, setState}:any): JSX.Element => {
    const [repeatConfigs, setRepeatConfigs] = useState<IScheduledRepeat>({
       repeatCount: "1",
       isRepeatChecked: true,
       repeatTimings: ["Day", "Hour", "Week", "Month"],
       selectedRpeatTimings: "Day",
    });
+
+   const handleRepeat = (repeat:any) => {
+      setState({...state, repeat: repeat})
+   }
+
+   useEffect(() => {
+      handleRepeat(repeatConfigs)
+   }, [repeatConfigs])
 
    return (
       <div>
